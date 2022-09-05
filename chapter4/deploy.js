@@ -14,10 +14,19 @@ async function deploy() {
     console.log("Deploying contract, ....");
 
     const contract = await contractFactory.deploy();
-
     console.log("Contract: ", contract);
 
-    
+
+    // another way: supply gas price, gas we want when deploying contract
+    const contract2 = await contractFactory.deploy({
+        gasPrice: 1000000000,
+        gasLimit: 4000000000,
+    });
+
+    // let's wait for 3 transaction confirmation blocks
+    const deploymentReceipt = await contract2.deployTransaction.wait(3);
+    console.log("ContractReceipt: ", deploymentReceipt);
+
 }
 
 deploy()
