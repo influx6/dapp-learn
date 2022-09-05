@@ -13,7 +13,7 @@ contract FundMe {
     address[] public funders;
 
     address public immutable owner;
-    uint256 public minimumUSD = 50;
+    uint256 public constant MINIMUM_USD = 50;
 
     constructor() {
         owner = msg.sender;
@@ -25,7 +25,7 @@ contract FundMe {
     }
 
     function fund() public payable {
-        require(msg.value.getConversionRate() >= minimumUSD, "Minimum of 1 ether allowed");
+        require(msg.value.getConversionRate() >= MINIMUM_USD, "Minimum of 1 ether allowed");
         addressToAmountFunded[msg.sender] += msg.value;
         funders.push(msg.sender);
     }
