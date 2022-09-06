@@ -48,6 +48,13 @@ async function deploy() {
 
     const currentFavNumber = await contract.retrieve();
     console.log("FavNumber: ", currentFavNumber);
+
+    const trxResponse = await contract.store("7");
+    const trxReceipt = await trxResponse.wait(1);
+    console.log("trxReceipt: ", trxReceipt);
+
+    const updatedFavNumber = await contract.retrieve();
+    console.log("FavNumber: ", updatedFavNumber);
 }
 
 deploy()
