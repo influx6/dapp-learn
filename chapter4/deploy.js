@@ -13,20 +13,41 @@ async function deploy() {
 
     console.log("Deploying contract, ....");
 
+    // Method 1: deploy contract and retrieve contract receipt
     const contract = await contractFactory.deploy();
     console.log("Contract: ", contract);
 
+    //
+    // // Method 2: deploy contract and retrieve contract receipt
+    // // another way: supply gas price, gas we want when deploying contract
+    // const contract2 = await contractFactory.deploy({
+    //     gasPrice: 1000000000,
+    //     gasLimit: 4000000000,
+    // });
+    //
+    // // let's wait for 3 transaction confirmation blocks
+    // const deploymentReceipt = await contract2.deployTransaction.wait(3);
+    // console.log("ContractReceipt: ", deploymentReceipt);
+    //
+    // // Method 3:
+    // // deploy contract with a transaction
+    // const nounce = await wallet.getTransactionCount();
+    // const transaction = {
+    //     nounce,
+    //     gasPrice: 20000000000,
+    //     gasLimit: 1000000,
+    //     to: null,
+    //     value: 0,
+    //     data: contractBinary,
+    //     chainId: 1337, // for ganache
+    // };
+    //
+    // const sendTrxRTesponse = await wallet.sendTransaction(transaction);
+    // await sendTrxRTesponse.await(1);
+    // console.log("SignedTransaction: ", signedTransaction);
 
-    // another way: supply gas price, gas we want when deploying contract
-    const contract2 = await contractFactory.deploy({
-        gasPrice: 1000000000,
-        gasLimit: 4000000000,
-    });
-
-    // let's wait for 3 transaction confirmation blocks
-    const deploymentReceipt = await contract2.deployTransaction.wait(3);
-    console.log("ContractReceipt: ", deploymentReceipt);
-
+    const currentFavNumber = await contract.retrieve();
+    console.log("FavNumber: ", currentFavNumber);
 }
 
 deploy()
