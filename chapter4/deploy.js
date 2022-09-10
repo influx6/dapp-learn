@@ -4,21 +4,21 @@ const ethers = require("ethers");
 const fs = require("fs-extra");
 
 async function deploy() {
-    const provider = ethers.providers.JsonRpcProvider(process.env.CHAIN_ENDPOINT);
+    const provider = new ethers.providers.JsonRpcProvider(process.env.CHAIN_ENDPOINT);
 
     // load key directly
     const wallet =  new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
     // load key from encrypted file
-    const encryptedKeyJSON = fs.readFileSync("./encrypt_key.json");
-    const wallet2Maker = new ethers.Wallet.fromEncryptedJsonSync(encryptedKeyJSON, process.env.PRIVATE_KEY_PASSWORD);
+    // const encryptedKeyJSON = fs.readFileSync("./encrypt_key.json");
+    // const wallet2Maker = new ethers.Wallet.fromEncryptedJsonSync(encryptedKeyJSON, process.env.PRIVATE_KEY_PASSWORD);
+    //
+    //
+    // const wallet2 = await wallet2Maker.connect(provider);
+    // console.log("Wallet2: ", wallet2);
 
-
-    const wallet2 = await wallet2Maker.connect(provider);
-    console.log("Wallet2: ", wallet2);
-
-    const contractABI = fs.readFileSync("./contracts/SimpleStorage_sol_SimpleStorage.abi");
-    const contractBinary = fs.readFileSync("./contracts/SimpleStorage_sol_SimpleStorage.bin");
+    const contractABI = fs.readFileSync("./contracts/SimpleStorage_sol_SimpleStorage.abi", "utf8");
+    const contractBinary = fs.readFileSync("./contracts/SimpleStorage_sol_SimpleStorage.bin", "utf8");
 
     const contractFactory = new ethers.ContractFactory(contractABI, contractBinary, wallet);
 
