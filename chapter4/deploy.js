@@ -10,6 +10,12 @@ async function deploy() {
     const wallet =  new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
     // load key from encrypted file
+    const encryptedKeyJSON = fs.readFileSync("./encrypt_key.json");
+    const wallet2Maker = new ethers.Wallet.fromEncryptedJsonSync(encryptedKeyJSON, process.env.PRIVATE_KEY_PASSWORD);
+
+
+    const wallet2 = await wallet2Maker.connect(provider);
+    console.log("Wallet2: ", wallet2);
 
     const contractABI = fs.readFileSync("./contracts/SimpleStorage_sol_SimpleStorage.abi");
     const contractBinary = fs.readFileSync("./contracts/SimpleStorage_sol_SimpleStorage.bin");
