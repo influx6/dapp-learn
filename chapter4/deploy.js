@@ -5,7 +5,11 @@ const fs = require("fs-extra");
 
 async function deploy() {
     const provider = ethers.providers.JsonRpcProvider(process.env.CHAIN_ENDPOINT);
-    const wallet = ethers.Wallet(process.env.PRIVATE_KEY, provider);
+
+    // load key directly
+    const wallet =  new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+
+    // load key from encrypted file
 
     const contractABI = fs.readFileSync("./contracts/SimpleStorage_sol_SimpleStorage.abi");
     const contractBinary = fs.readFileSync("./contracts/SimpleStorage_sol_SimpleStorage.bin");
@@ -56,6 +60,13 @@ async function deploy() {
 
     const updatedFavNumber = await contract.retrieve();
     console.log("FavNumber: ", updatedFavNumber);
+
+    const transactionResponse = await contract.store("7");
+    const transactionReceipt = await transactionResponse.wait(1);
+    console.log("Receipt: ", transactionReceipt);
+
+    const updatedFavNumber2 = await contract.retrieve();
+    console.log("FavNumber2: ", updatedFavNumber2);
 }
 
 deploy()
