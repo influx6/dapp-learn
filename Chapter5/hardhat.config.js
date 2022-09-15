@@ -5,6 +5,9 @@ require("dotenv").config()
 module.exports = {
   solidity: "0.8.9",
   defaultNetwork: "hardhat",
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_API_KEY,
+  },
   networks: {
     "rinkeby": {
       url: process.env.CHAIN_ENDPOINT,
