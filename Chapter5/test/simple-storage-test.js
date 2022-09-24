@@ -19,11 +19,11 @@ describe("SimpleStorage", function () {
   });
 
 
-    it("should should update when we call store", async () => {
-        const transactionResponse = await simpleStorageInstance.store("7");
-        await transactionResponse.wait(1);
+  it("should should update when we call store", async () => {
+    const transactionResponse = await simpleStorageInstance.store("7");
+    await transactionResponse.wait(1);
 
-        const currentValue = await simpleStorageInstance.retrieve();
-        assert.equal("7", currentValue.toString())
-    });
+    const currentValue = await simpleStorageInstance.retrieve();
+    assert.equal("7", currentValue.toString())
+  });
 });
