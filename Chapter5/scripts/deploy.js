@@ -20,7 +20,6 @@ async function main() {
   console.log("Deployed....");
   await simpleStorageInstance.deployed();
 
-
   if (hre.network.config.chainId === 4 && process.env.ETHERSCAN_API_KEY) {
       await simpleStorageInstance.deployTransaction.wait(6);
       await verify(simpleStorageInstance.address, []);
