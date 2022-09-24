@@ -14,9 +14,9 @@ module.exports = {
       url: "http://localhost:8545",
       chainId: 31337,
     },
-    "rinkeby": {
+    rinkeby: {
       url: process.env.CHAIN_ENDPOINT,
-      chainId: process.env.CHAIN_NUMBER,
+      chainId: parseInt(process.env.CHAIN_NUMBER),
       accounts: [process.env.PRIVATE_KEY]
     },
   }
