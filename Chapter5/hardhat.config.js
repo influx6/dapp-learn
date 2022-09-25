@@ -1,5 +1,6 @@
 require("dotenv").config()
 require("@nomicfoundation/hardhat-toolbox");
+require("hardhat-gas-reporter");
 require("./tasks/block-number");
 
 /** @type import('hardhat/config').HardhatUserConfig */
