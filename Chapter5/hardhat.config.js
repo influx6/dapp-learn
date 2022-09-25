@@ -10,6 +10,14 @@ module.exports = {
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
+  gasReporter: {
+    enabled: true,
+    outputFile: "gas_report.txt",
+    noColors: true,
+    currency: "USD",
+    coinmarketcap: process.env.COIN_MARKET_API_KEY,
+    token: "MATIC",
+  },
   networks: {
     localhost: {
       url: "http://localhost:8545",
