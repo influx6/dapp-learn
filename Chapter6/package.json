@@ -1,5 +1,5 @@
 {
-  "name": "chapter5",
+  "name": "chapter6",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -17,6 +17,6 @@
     "dotenv": "^16.0.2",
     "hardhat": "^2.11.1",
     "hardhat-gas-reporter": "^1.0.9",
-    "solidity-coverage": "^0.8.2"
+    "solidity-coverage": "^0.7.21"
   }
 }
