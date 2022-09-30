@@ -48,6 +48,12 @@ describe("FundMe", async  () => {
             // Assert
             assert.equal(endFundMeBalance, 0);
             assert.equal(endFundDeployerBalance.add(gasCost).toString(), startFundMeBalance.add(startFundDeployerBalance).toString());
+
+            for (let i = 0; i < 6; i++) {
+                const connectedFundedAccountAmount = await fundMe.addressToAmountFunded(accounts[i].address);
+                assert.equal(0, connectedFundedAccountAmount)
+            }
+
         })
 
         it("should be able to withdraw funds", async () => {
@@ -65,6 +71,7 @@ describe("FundMe", async  () => {
             const gasCost = transactionReceipt.gasUsed.mul(transactionReceipt.effectiveGasPrice);
 
             // Assert
+            assert.equal(endFundMeBalance, 0);
             assert.equal(endFundDeployerBalance.add(gasCost).toString(), startFundMeBalance.add(startFundDeployerBalance).toString());
         })
     });
