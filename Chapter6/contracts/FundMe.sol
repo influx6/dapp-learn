@@ -12,9 +12,10 @@ contract FundMe {
     mapping(address => uint256) public addressToAmountFunded;
     address[] public funders;
 
+    uint256 public constant MINIMUM_USD = 50;
+
     address public immutable owner;
     AggregatorV3Interface public priceFeed;
-    uint256 public constant MINIMUM_USD = 50;
 
     constructor(address priceFeedAddr) {
         owner = msg.sender;
@@ -32,7 +33,19 @@ contract FundMe {
         _;
     }
 
-    function withdrawal() onlyOwner public {
+    function cheaperWithdrawal() public payable {
+        address[] memory c_funders = funders;
+        for(uint256 funderIndex = 0; funderIndex < c_funders.length; funderIndex++) {
+            address funder = c_funders[funderIndex];
+            addressToAmountFunded[funder] = 0;
+        }
+
+        funders = new address[](0);
+        (bool callSuccess, ) = owner.call{ value: address(this).balance}("");
+        require(callSuccess, "Call failed");
+    }
+
+    function withdrawal() onlyOwner public payable {
         for (uint256 funderIndex=0; funderIndex < funders.length; funderIndex++) {
             address funder = funders[funderIndex];
             addressToAmountFunded[funder] = 0;
