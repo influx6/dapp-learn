@@ -24,6 +24,13 @@ describe("FundMe", async  () => {
         it("should  fail if not enough of amount is sent", async () => {
             await expect(fundMe.fund()).to.be.revertedWith("Minimum of 1 ether allowed");
         })
+
+        it("should update amount datastructure", async () => {
+            const sendValue = ethers.utils.parseEther("1");
+            await fundMe.fund({ value: sendValue });
+            const response = await fundMe.addressToAmountFunded(deployer);
+            assert.equal(sendValue.toString(), response.toString());
+        })
     });
 
 });
