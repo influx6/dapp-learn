@@ -19,11 +19,6 @@ contract FundMe {
         owner = msg.sender;
     }
 
-    function getVersion() internal view returns (uint256) {
-        AggregatorV3Interface priceFeed = AggregatorV3Interface(chainLinkAggregatorInterfaceAddress);
-        return priceFeed.version();
-    }
-
     function fund() public payable {
         require(msg.value.getConversionRate() >= MINIMUM_USD, "Minimum of 1 ether allowed");
         addressToAmountFunded[msg.sender] += msg.value;
@@ -36,7 +31,7 @@ contract FundMe {
     }
 
     function withdrawal() onlyOwner public {
-        for (uint256 funderIndex=0; funderIndex < funders.length; fundersIndex++) {
+        for (uint256 funderIndex=0; funderIndex < funders.length; funderIndex++) {
             address funder = funders[funderIndex];
             addressToAmountFunded[funder] = 0;
         }

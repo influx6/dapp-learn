@@ -16,6 +16,11 @@ library PriceConverter {
         return uint256(answer * oneWei);
     }
 
+    function getVersion() internal view returns (uint256) {
+        AggregatorV3Interface priceFeed = AggregatorV3Interface(chainLinkAggregatorInterfaceAddress);
+        return priceFeed.version();
+    }
+
     function getConversionRate(uint256 ethAmount) internal view returns (uint256) {
         uint256 ethPrice = getPrice();
         uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18;

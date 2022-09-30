@@ -19,5 +19,8 @@
     "hardhat-gas-reporter": "^1.0.9",
     "solhint": "^3.3.7",
     "solidity-coverage": "^0.7.21"
+  },
+  "dependencies": {
+    "@chainlink/contracts": "^0.5.1"
   }
 }
