@@ -2,7 +2,7 @@ const { deployments, ethers, getNamedAccounts} = require("hardhat");
 const { assert, expect } =  require("chai");
 
 describe("FundMe", async  () => {
-    let fundMe, deployer, mockV3Aggregator;
+    let fundMe, FundMe_NotOwner, deployer, mockV3Aggregator;
     const sendValue = ethers.utils.parseEther("1");
 
     beforeEach(async () => {
@@ -11,6 +11,7 @@ describe("FundMe", async  () => {
         await deployments.fixture(["all"]);
 
         fundMe = await ethers.getContract("FundMe", deployer);
+        FundMe_NotOwner
         mockV3Aggregator = await ethers.getContract("MockV3Aggregator", deployer);
     });
 
@@ -59,6 +60,15 @@ describe("FundMe", async  () => {
                 const connectedFundedAccountAmount = await fundMe.addressToAmountFunded(accounts[i].address);
                 assert.equal(0, connectedFundedAccountAmount)
             }
+
+        })
+
+        it("should only be withdrawable by owner", async () => {
+            const accounts = await ethers.getSigners();
+            const attacker = accounts[1];
+            const attackerContract = await fundMe.connect(attacker);
+
+            await expect(attackerContract.withdrawal()).to.be.revertedWithCustomError(fundMe, "FundMe__NotOwner")
 
         })
 
