@@ -5,8 +5,9 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments;
     const { deployer } = await getNamedAccounts();
 
-    const chainId = network.config.chainId;
-    if (!developmentChains.includes(network.name)) return;
+    if (!developmentChains.includes(network.name)) {
+        return;
+    }
 
     log("Compiling mocks contracts");
 

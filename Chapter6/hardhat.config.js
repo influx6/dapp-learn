@@ -36,11 +36,13 @@ module.exports = {
     localhost: {
       url: "http://localhost:8545",
       chainId: 31337,
+      blockConfirmations: 1,
     },
-    rinkeby: {
+    georli: {
       url: process.env.CHAIN_ENDPOINT,
       chainId: parseInt(process.env.CHAIN_NUMBER),
-      accounts: [process.env.PRIVATE_KEY]
+      accounts: [process.env.PRIVATE_KEY],
+      blockConfirmations: 3,
     },
   },
   namedAccounts: {

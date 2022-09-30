@@ -1,5 +1,6 @@
 const {network} = require("hardhat");
 const { networkConfig, developmentChains } = require("../helpers/helper-hardhat-config.js");
+const { verify } = require("../utils/eth-verify.js")
 
 async function deployFundMe(hre){
     const { getNamedAccounts,  deployments } = hre;
@@ -17,15 +18,20 @@ async function deployFundMe(hre){
         ethUsdPriceFeed = networkConfig[chainId].ethUsdPriceFeed;
     }
 
+    const fundMeArgs = [ ethUsdPriceFeed];
+
     const fundMe = await deploy("FundMe", {
         contract: "FundMe",
         from: deployer,
         log: true,
-        args: [
-            // set Chainlink price feed address
-            ethUsdPriceFeed,
-        ]
+        args: fundMeArgs,
+        waitConfirmations: network.config.blockConfirmations || 1,
     })
+
+
+    if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
+        await verify(fundMe.address, fundMeArgs);
+    }
 }
 
 module.exports = deployFundMe;
