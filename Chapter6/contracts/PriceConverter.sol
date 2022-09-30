@@ -5,24 +5,17 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 library PriceConverter {
     // Use Georli Chainlink address
-    address constant private chainLinkAggregatorInterfaceAddress = 0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e;
     int256 constant private oneWei = 1e10;
 
-    function getPrice() internal view returns (uint256) {
-        AggregatorV3Interface priceFeed = AggregatorV3Interface(chainLinkAggregatorInterfaceAddress);
+    function getPrice(AggregatorV3Interface priceFeed) internal view returns (uint256) {
         (, int256 answer, , ,) = priceFeed.latestRoundData();
 
         // ETH/USD rate in 18 bits (wei)
         return uint256(answer * oneWei);
     }
 
-    function getVersion() internal view returns (uint256) {
-        AggregatorV3Interface priceFeed = AggregatorV3Interface(chainLinkAggregatorInterfaceAddress);
-        return priceFeed.version();
-    }
-
-    function getConversionRate(uint256 ethAmount) internal view returns (uint256) {
-        uint256 ethPrice = getPrice();
+    function getConversionRate(uint256 ethAmount, AggregatorV3Interface priceFeed) internal view returns (uint256) {
+        uint256 ethPrice = getPrice(priceFeed);
         uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18;
 
         // the actual ETH/USD conversion rate, after adjusting the extra 0s.

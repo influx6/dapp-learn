@@ -13,14 +13,16 @@ contract FundMe {
     address[] public funders;
 
     address public immutable owner;
+    AggregatorV3Interface public priceFeed;
     uint256 public constant MINIMUM_USD = 50;
 
-    constructor() {
+    constructor(address priceFeedAddr) {
         owner = msg.sender;
+        priceFeed = AggregatorV3Interface(priceFeedAddr);
     }
 
     function fund() public payable {
-        require(msg.value.getConversionRate() >= MINIMUM_USD, "Minimum of 1 ether allowed");
+        require(msg.value.getConversionRate(priceFeed) >= MINIMUM_USD, "Minimum of 1 ether allowed");
         addressToAmountFunded[msg.sender] += msg.value;
         funders.push(msg.sender);
     }

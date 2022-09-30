@@ -2,10 +2,24 @@ require("dotenv").config()
 require("@nomicfoundation/hardhat-toolbox");
 require("hardhat-gas-reporter");
 require("solidity-coverage");
+require("hardhat-deploy");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.9",
+  // solidity: "0.8.9",
+  solidity: {
+    compilers: [
+      {
+        version:"0.8.9",
+      },
+      {
+        version:"0.8.8",
+      },
+      {
+        version:"0.6.6",
+      },
+    ]
+  },
   defaultNetwork: "hardhat",
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
@@ -28,5 +42,12 @@ module.exports = {
       chainId: parseInt(process.env.CHAIN_NUMBER),
       accounts: [process.env.PRIVATE_KEY]
     },
+  },
+  namedAccounts: {
+    deployer: {
+      default: 0,
+      // set network chain id and value is the account we want to use.
+      31337: 0,
+    }
   }
 };
