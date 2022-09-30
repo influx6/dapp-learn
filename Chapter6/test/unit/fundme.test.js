@@ -33,6 +33,12 @@ describe("FundMe", async  () => {
                 await fundMeConnectedContract.fund({ value: sendValue });
             }
 
+            // assert accounts have amount in fund listj
+            for (let i = 0; i < 6; i++) {
+                const connectedFundedAccountAmount = await fundMe.addressToAmountFunded(accounts[i].address);
+                assert.notEqual(0, connectedFundedAccountAmount)
+            }
+
             const startFundMeBalance = await fundMe.provider.getBalance(fundMe.address);
             const startFundDeployerBalance = await fundMe.provider.getBalance(deployer);
             // Act
