@@ -1,6 +1,8 @@
-const { deployments, ethers, getNamedAccounts} = require("hardhat");
+const { deployments, ethers, getNamedAccounts, network} = require("hardhat");
 const { assert, expect } =  require("chai");
+const {developmentChains} = require("../../helpers/helper-hardhat-config");
 
+developmentChains.includes(network.name) ?
 describe("FundMe", async  () => {
     let fundMe, FundMe_NotOwner, deployer, mockV3Aggregator;
     const sendValue = ethers.utils.parseEther("1");
@@ -110,4 +112,4 @@ describe("FundMe", async  () => {
         })
     });
 
-});
+}) : describe.skip("skip unit tests");

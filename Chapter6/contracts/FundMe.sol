@@ -42,6 +42,8 @@ contract FundMe {
     }
 
     function cheaperWithdrawal() public payable {
+        // by directly using memory instead of relying on the storage, we can save
+        // gas as well
         address[] memory c_funders = funders;
         for(uint256 funderIndex = 0; funderIndex < c_funders.length; funderIndex++) {
             address funder = c_funders[funderIndex];
