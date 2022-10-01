@@ -9,12 +9,20 @@ error FundMe__NotOwner();
 contract FundMe {
     using PriceConverter for uint256;
 
+    // These are left as public but generally private fields cost less gas
+    // if you want them accessible, consider adding getter methods instead.
     mapping(address => uint256) public addressToAmountFunded;
     address[] public funders;
 
+    // These are left as public but generally private fields cost less gas
+    // if you want them accessible, consider adding getter methods instead.
     uint256 public constant MINIMUM_USD = 50;
 
+    // owner should never really be public and must always be immutable
     address public immutable owner;
+
+    // These are left as public but generally private fields cost less gas
+    // if you want them accessible, consider adding getter methods instead.
     AggregatorV3Interface public priceFeed;
 
     constructor(address priceFeedAddr) {
