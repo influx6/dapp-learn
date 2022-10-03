@@ -1,5 +1,7 @@
 pragma solidity ^0.8.0;
 
+import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
+
 // Raffle lottery will allow
 // 1. you to enter lottery after paying some amout
 // 2. Trigger random winner (verifiably random)
@@ -9,8 +11,8 @@ pragma solidity ^0.8.0;
 
 error Raffle__BelowEntranceFee();
 
-contract Raffle {
-    event Reffle__NewJoiner(address player, uint256 amount, uint256 totalRaffleAsOfNow);
+contract Raffle is VRFConsumerBaseV2 {
+    event Reffle__NewJoiner(address indexed player, uint256 amount, uint256 totalRaffleAsOfNow);
 
     /** memory state variables **/
     address private immutable i_owner;
@@ -20,7 +22,7 @@ contract Raffle {
     address payable[] private s_players;
 
 
-    constructor(uint256 entranceFee){
+    constructor(uint256 entranceFee, address vrfCoordinatorV2) VRFConsumerBaseV2(vrfCoordinatorV2) {
         i_owner = msg.sender;
         i_entranceFee = entranceFee;
     }
@@ -32,9 +34,9 @@ contract Raffle {
         _;
     }
 
-//    function getPlayer() public view returns(address) {
-//
-//    }
+    function getPlayer(uint256 index) public view returns (address) {
+        return s_players[index];
+    }
 
     function getEntranceFee() public view returns(uint256) {
         return i_entranceFee;
@@ -45,7 +47,13 @@ contract Raffle {
         emit Reffle__NewJoiner(msg.sender, msg.value, address(this).balance);
     }
 
-    function pickRandomWinner() {
+    function requestRandomWinner() external {
+        // Request random number
+        // use it to select a winner
+        // VRF is a 2 transaction process.
+    }
+
+    function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) internal override {
 
     }
 
