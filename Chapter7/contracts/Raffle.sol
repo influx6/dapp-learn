@@ -90,14 +90,6 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
         _;
     }
 
-    function getPlayer(uint256 index) public view returns (address) {
-        return s_players[index];
-    }
-
-    function getEntranceFee() public view returns(uint256) {
-        return i_entranceFee;
-    }
-
     function enterRaffle() m_belowEntranceFee m_onlyOpenState public payable {
         s_players.push(payable(msg.sender));
         emit Raffle__NewJoiner(msg.sender, msg.value, address(this).balance);
@@ -178,6 +170,26 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
 
     function getRecentWinner() public view returns (address) {
         return s_recentWinner;
+    }
+
+    function getPlayer(uint256 index) public view returns (address) {
+        return s_players[index];
+    }
+
+    function getTotalPlayers() public view returns(uint256) {
+        return s_players.length;
+    }
+
+    function getEntranceFee() public view returns(uint256) {
+        return i_entranceFee;
+    }
+
+    function getNumWords() public pure returns (uint256) {
+        return requestTotalWords;
+    }
+
+    function getRaffleState() public view returns (RaffleState) {
+        return s_state;
     }
 
     fallback() external payable {
