@@ -180,6 +180,10 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
         return s_players.length;
     }
 
+    function getLatestTimestamp() public view returns(uint256) {
+        return s_lastBlockTimestamp;
+    }
+
     function getEntranceFee() public view returns(uint256) {
         return i_entranceFee;
     }
