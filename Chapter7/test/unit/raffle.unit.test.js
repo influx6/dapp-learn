@@ -50,6 +50,25 @@ developmentChains.includes(network.name) ?
             })
         });
 
+
+        describe("performUpkeep", async () => {
+            it("should only run if checkupkeep is true", async () => {
+                const timeInterval = await raffleContract.getTimeInterval();
+
+                await raffleContract.enterRaffle({ value: raffleEntraceFee });
+
+                // move time forward and mine a block (without calling evm_mine, the time move progression is useless)
+                await network.provider.send("evm_increaseTime", [timeInterval.toNumber() + 1]);
+                await network.provider.send("evm_mine", []);
+
+                const transaction = await raffleContract.performUpkeep([]);
+                assert(transaction);
+            })
+            it("should revert if checkupkeep is false", async () => {
+                await expect(raffleContract.performUpkeep([])).to.be.reverted;
+            })
+        })
+
         describe("checkUpkeep", async () => {
             it("should return false if no one is in lottery", async () => {
                 const timeInterval = await raffleContract.getTimeInterval();
