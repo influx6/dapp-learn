@@ -67,6 +67,26 @@ developmentChains.includes(network.name) ?
             it("should revert if checkupkeep is false", async () => {
                 await expect(raffleContract.performUpkeep([])).to.be.reverted;
             })
+            it("should complete raffle upkeep, reset state and emits event", async () => {
+                const timeInterval = await raffleContract.getTimeInterval();
+
+                await raffleContract.enterRaffle({ value: raffleEntraceFee });
+
+                // move time forward and mine a block (without calling evm_mine, the time move progression is useless)
+                await network.provider.send("evm_increaseTime", [timeInterval.toNumber() + 1]);
+                await network.provider.send("evm_mine", []);
+
+                const transaction = await raffleContract.performUpkeep([]);
+                assert(transaction);
+
+                const transactionReceipt = await transaction.wait(1);
+                const requestId = transactionReceipt.events[2].args.requestId;
+                assert(requestId.toNumber() > 0)
+
+                const raffleState = await raffleContract.getRaffleState();
+                assert.equal(raffleState.toString(), "1");
+
+            })
         })
 
         describe("checkUpkeep", async () => {
