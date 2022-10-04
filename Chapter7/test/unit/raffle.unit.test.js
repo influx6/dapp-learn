@@ -50,6 +50,17 @@ developmentChains.includes(network.name) ?
             })
         });
 
+        describe("checkUpkeep", async () => {
+            it("should return false if no one is in lottery", async () => {
+                // move time forward and mine a block (without calling evm_mine, the time move progression is useless)
+                await network.provider.send("evm_increaseTime", [timeInterval.toNumber() + 1]);
+                await network.provider.send("evm_mine", []);
+
+                const [canUpkeep, ] = await raffleContract.checkUpKeep([]);
+                assert.isFalse(canUpkeep);
+            })
+        })
+
         describe("enterRaffle", async () => {
             it("should add a new player with enough eth", async () => {
                 await raffleContract.enterRaffle({ value: raffleEntraceFee });
