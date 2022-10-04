@@ -60,6 +60,12 @@ developmentChains.includes(network.name) ?
 
                 const [canUpkeep, ] = await raffleContract.checkUpkeep([]);
                 assert.isFalse(canUpkeep);
+
+                // another way is to use CallStatic when dealing with a public function where a transaction will
+                // occur when we call said method. CallStatic allows us to skip the transaction operation and call
+                // like a view function
+                const { upkeepNeeded } = await raffleContract.callStatic.checkUpkeep([]);
+                assert.isFalse(upkeepNeeded);
             })
         })
 
