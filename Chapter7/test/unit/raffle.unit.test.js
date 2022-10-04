@@ -67,6 +67,27 @@ developmentChains.includes(network.name) ?
                 const { upkeepNeeded } = await raffleContract.callStatic.checkUpkeep([]);
                 assert.isFalse(upkeepNeeded);
             })
+            it("should return false if raffle is not open and is in calculating state", async () => {
+                const timeInterval = await raffleContract.getTimeInterval();
+
+                await raffleContract.enterRaffle({ value: raffleEntraceFee });
+
+                // move time forward and mine a block (without calling evm_mine, the time move progression is useless)
+                await network.provider.send("evm_increaseTime", [timeInterval.toNumber() + 1]);
+                await network.provider.send("evm_mine", []);
+
+                // pretend to be chainlink keeper and call performUpKeep()
+                await raffleContract.performUpkeep([]);
+
+                const raffleState = await raffleContract.getRaffleState();
+                assert.equal(raffleState.toString(), "1");
+
+                // another way is to use CallStatic when dealing with a public function where a transaction will
+                // occur when we call said method. CallStatic allows us to skip the transaction operation and call
+                // like a view function
+                const { upkeepNeeded } = await raffleContract.callStatic.checkUpkeep([]);
+                assert.isFalse(upkeepNeeded);
+            })
         })
 
         describe("enterRaffle", async () => {
