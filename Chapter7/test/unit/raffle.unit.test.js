@@ -51,6 +51,69 @@ developmentChains.includes(network.name) ?
         });
 
 
+        describe("fulfillRandomWords", async () => {
+            beforeEach(async () => {
+                const timeInterval = await raffleContract.getTimeInterval();
+
+                await raffleContract.enterRaffle({ value: raffleEntraceFee });
+
+                // move time forward and mine a block (without calling evm_mine, the time move progression is useless)
+                await network.provider.send("evm_increaseTime", [timeInterval.toNumber() + 1]);
+                await network.provider.send("evm_mine", []);
+            })
+
+            it("should only be called after performUpkeep is done", async () => {
+                await expect(mockVRFCoordinatorV2Mock.fulfillRandomWords(0, raffleContract.address)).to.be.revertedWith("nonexistent request");
+                await expect(mockVRFCoordinatorV2Mock.fulfillRandomWords(1, raffleContract.address)).to.be.revertedWith("nonexistent request");
+            })
+
+            it("should pick a winner, reset lottery and sends the money", async () => {
+                const additionalEntrants = 3, startingAccountIndex = 1;
+                for (let i = startingAccountIndex; i < (startingAccountIndex + additionalEntrants); i++) {
+                    const account = accounts[i];
+                    await raffleContract.connect(account).enterRaffle({ value: raffleEntraceFee });
+                }
+
+                const contractBalance = await raffleContract.provider.getBalance(raffleContract.address);
+                assert.notEqual(contractBalance.toString(), "0")
+
+                const startingTimestamp = await raffleContract.getLatestTimestamp();
+                await new Promise(async (resolve, reject) => {
+                    raffleContract.once("Raffle__WinnerPicked",async () => {
+                        console.log("Got event")
+                        try {
+                            const recentWinner = await raffleContract.getRecentWinner();
+                            assert(recentWinner)
+
+                            const raffleState = await raffleContract.getRaffleState();
+                            assert.equal(raffleState.toString(), "0");
+
+                            const endingTimestamp = await raffleContract.getLatestTimestamp();
+                            assert.isTrue(endingTimestamp > startingTimestamp);
+
+                            const remainingPlayers = await raffleContract.getTotalPlayers();
+                            assert.equal(remainingPlayers.toString(), "0")
+
+                            const contractBalance = await raffleContract.provider.getBalance(raffleContract.address);
+                            assert.equal(contractBalance.toString(), "0")
+
+                            resolve()
+                        } catch(e) {
+                            reject(e)
+                        }
+                    })
+
+                    const tx = await raffleContract.performUpkeep([]);
+                    const txRt = await tx.wait(1);
+                    await mockVRFCoordinatorV2Mock.fulfillRandomWords(
+                        txRt.events[2].args.requestId,
+                        raffleContract.address,
+                    );
+                })
+            })
+        })
+
+
         describe("performUpkeep", async () => {
             it("should only run if checkupkeep is true", async () => {
                 const timeInterval = await raffleContract.getTimeInterval();

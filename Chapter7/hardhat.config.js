@@ -42,6 +42,9 @@ module.exports = {
     coinmarketcap: process.env.COIN_MARKET_API_KEY,
     token: "MATIC",
   },
+  mocha: {
+    timeout: 200000, // 200 secs max
+  },
   networks: {
     hardhat: {
       chainId: 31337,
