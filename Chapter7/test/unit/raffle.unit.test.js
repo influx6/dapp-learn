@@ -80,7 +80,6 @@ developmentChains.includes(network.name) ?
                 const startingTimestamp = await raffleContract.getLatestTimestamp();
                 await new Promise(async (resolve, reject) => {
                     raffleContract.once("Raffle__WinnerPicked",async () => {
-                        console.log("Got event")
                         try {
                             const recentWinner = await raffleContract.getRecentWinner();
                             assert(recentWinner)
