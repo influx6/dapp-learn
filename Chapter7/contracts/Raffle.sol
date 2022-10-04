@@ -77,7 +77,7 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
     }
 
     modifier m_onlyOwner {
-        if (address(msg.sender) == i_owner) {
+        if (address(msg.sender) != i_owner) {
             revert Raffle__OnlyOwnerAllowed();
         }
         _;

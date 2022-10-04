@@ -23,6 +23,7 @@ async function deployRaffle(hre){
 
         // fund token
         await vrfCoordinatorV2Mock.fundSubscription(subscriptionId, VRF_SUB_FUND_AMOUNT);
+
     } else {
         vrfCoordinatorAddress = networkConfig[chainId].vrfCoordinator;
         subscriptionId = networkConfig[chainId].subscriptionId;
@@ -50,6 +51,14 @@ async function deployRaffle(hre){
         waitConfirmations: network.config.blockConfirmations || 1,
     })
 
+
+    // add raffle contract as consumer to vrfCoi
+    if (developmentChains.includes(network.name)) {
+        const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock");
+
+        log("Adding raffle contract with address: ", raffle.address, " to vrfCoordinatorV2 consumer list with subscription: ", subscriptionId.toNumber());
+        await vrfCoordinatorV2Mock.addConsumer(subscriptionId.toNumber(), raffle.address);
+    }
 
     if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
         await verify(raffle.address, raffleArgs);

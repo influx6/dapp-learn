@@ -64,6 +64,22 @@ developmentChains.includes(network.name) ?
                 // await expect(raffleContract.enterRaffle()).to.be.revertedWithCustomError(raffleContract, "Raffle__BelowEntranceFee");
                 await expect(raffleContract.enterRaffle()).to.be.reverted;
             })
+            it("should enter calculating state once interval has passed", async () => {
+                await raffleContract.enterRaffle({ value: raffleEntraceFee });
+                const timeInterval = await raffleContract.getTimeInterval();
+
+                // move time forward and mine a block (without calling evm_mine, the time move progression is useless)
+                await network.provider.send("evm_increaseTime", [timeInterval.toNumber() + 1]);
+                await network.provider.send("evm_mine", []);
+
+                // pretend to be chainlink keeper and call performUpKeep()
+                await raffleContract.performUpkeep([]);
+
+                const raffleState = await raffleContract.getRaffleState();
+                assert.equal(raffleState.toString(), "1");
+
+                await expect(raffleContract.enterRaffle({ value: raffleEntraceFee })).to.be.reverted;
+            })
         })
 
     }) : describe.skip("skip unit tests");
