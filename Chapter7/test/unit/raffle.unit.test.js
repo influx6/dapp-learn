@@ -52,11 +52,13 @@ developmentChains.includes(network.name) ?
 
         describe("checkUpkeep", async () => {
             it("should return false if no one is in lottery", async () => {
+                const timeInterval = await raffleContract.getTimeInterval();
+
                 // move time forward and mine a block (without calling evm_mine, the time move progression is useless)
                 await network.provider.send("evm_increaseTime", [timeInterval.toNumber() + 1]);
                 await network.provider.send("evm_mine", []);
 
-                const [canUpkeep, ] = await raffleContract.checkUpKeep([]);
+                const [canUpkeep, ] = await raffleContract.checkUpkeep([]);
                 assert.isFalse(canUpkeep);
             })
         })
