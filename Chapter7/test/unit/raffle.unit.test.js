@@ -159,8 +159,8 @@ developmentChains.includes(network.name) ?
                 await network.provider.send("evm_increaseTime", [timeInterval.toNumber() + 1]);
                 await network.provider.send("evm_mine", []);
 
-                const [canUpkeep, ] = await raffleContract.checkUpkeep([]);
-                assert.isFalse(canUpkeep);
+                // const [canUpkeep, ] = await raffleContract.checkUpkeep([]);
+                // assert.isFalse(canUpkeep);
 
                 // another way is to use CallStatic when dealing with a public function where a transaction will
                 // occur when we call said method. CallStatic allows us to skip the transaction operation and call

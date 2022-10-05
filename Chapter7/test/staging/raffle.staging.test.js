@@ -20,7 +20,7 @@ const { assert, expect } =  require("chai");
             player = namedAccounts.player;
 
             // get raffle contract and entrance fee
-            raffleContract = await ethers.getContract("Raffle", deployer);
+            raffleContract = await ethers.getContractAt("Raffle", "0x3A828830628278A2BA9997C2eCBa83790f80E681", deployer);
             raffleEntranceFee = await raffleContract.getEntranceFee();
             raffleTimeInterval = await raffleContract.getTimeInterval();
         });
