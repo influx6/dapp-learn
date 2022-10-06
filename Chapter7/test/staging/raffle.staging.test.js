@@ -1,19 +1,14 @@
-const { deployments, ethers, getNamedAccounts, network} = require("hardhat");
-const {developmentChains, networkConfig} = require("../../utils/helper-hardhat-config");
+const { ethers, getNamedAccounts, network} = require("hardhat");
+const {developmentChains} = require("../../utils/helper-hardhat-config");
 const { assert, expect } =  require("chai");
 
 !developmentChains.includes(network.name) ?
     describe("Raffle", async  () => {
-        const chainId = network.config.chainId;
-        const netConfig = networkConfig[chainId];
-
-        let raffleContract, raffleEntranceFee, raffleTimeInterval, namedAccounts, accounts, deployer, player;
+        let raffleContract, raffleEntranceFee, raffleTimeInterval, namedAccounts, deployer, player;
 
         beforeEach(async () => {
             // deploy with hardhat-deploy
             namedAccounts = await getNamedAccounts();
-
-            accounts = await ethers.getSigners();
 
             // deployers and clients
             deployer = namedAccounts.deployer;
@@ -22,7 +17,10 @@ const { assert, expect } =  require("chai");
             // get raffle contract and entrance fee
             raffleContract = await ethers.getContractAt("Raffle", "0x3A828830628278A2BA9997C2eCBa83790f80E681", deployer);
             raffleEntranceFee = await raffleContract.getEntranceFee();
+            console.log("Entrance fee: ", raffleEntranceFee.toString());
+
             raffleTimeInterval = await raffleContract.getTimeInterval();
+            console.log("Time Interval: ", raffleTimeInterval.toString());
         });
 
         describe("fulfillRandomWords", async () => {
@@ -32,6 +30,8 @@ const { assert, expect } =  require("chai");
                 await new Promise(async (resolve, reject) => {
 
                     raffleContract.once("Raffle__WinnerPicked",async () => {
+                        console.log("Received ready event");
+
                         try {
                             await expect(raffleState.getPlayer(0)).to.be.reverted;
 
@@ -57,8 +57,9 @@ const { assert, expect } =  require("chai");
                     });
 
                     console.log("Entering raffle with fee: ", raffleEntranceFee.toString(), " as in: ", ethers.utils.parseEther("0.01").toString())
-                    await raffleContract.enterRaffle({ value: raffleEntraceFee });
+                    await raffleContract.connect(deployer).enterRaffle({ value: raffleEntraceFee });
 
+                    console.log("Get balance of contract ")
                     const contractBalance = await raffleContract.provider.getBalance(raffleContract.address);
                     assert.notEqual(contractBalance.toString(), "0")
                     console.log("Validated contract now has balance: ", contractBalance.toString())

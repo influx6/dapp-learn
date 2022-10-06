@@ -6,7 +6,7 @@ const { assert, expect } =  require("chai");
     describe("FundMe::Staging", async  () => {
         describe("allow people to fund and withdraw from fund", async () => {
             let fundMe, deployer, mockV3Aggregator;
-            const sendValue = ethers.utils.parseEther("1");
+            const sendValue = ethers.utils.parseEther("0.01");
 
             beforeEach(async () => {
                 // get accounts

@@ -43,7 +43,7 @@ module.exports = {
     token: "MATIC",
   },
   mocha: {
-    timeout: 200000, // 200 secs max
+    timeout: 900000, // 200 secs max
   },
   networks: {
     hardhat: {
