@@ -43,7 +43,7 @@ module.exports = {
     token: "MATIC",
   },
   mocha: {
-    timeout: 900000, // 200 secs max
+    timeout: 200000, // 200 secs max
   },
   networks: {
     hardhat: {
@@ -52,9 +52,24 @@ module.exports = {
     },
     georli: {
       url: process.env.CHAIN_ENDPOINT,
-      chainId: parseInt(process.env.CHAIN_NUMBER),
+      chainId: 5,
       accounts: [process.env.PRIVATE_KEY],
       blockConfirmations: 2,
+      saveDeployments: true,
+    },
+    mumbai: {
+      chainId: 80001,
+      url: "https://rpc-mumbai.matic.today",
+      accounts: [process.env.PRIVATE_KEY],
+      blockConfirmations: 2,
+      saveDeployments: true,
+    },
+    polygon: {
+      url: "https://polygon-rpc.com/",
+      accounts: [process.env.PRIVATE_KEY],
+      blockConfirmations: 2,
+      saveDeployments: true,
+      chainId: 137,
     },
   },
 };
