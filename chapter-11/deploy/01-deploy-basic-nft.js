@@ -8,8 +8,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
     log("----------------------------------------------------")
     arguments = []
-    const basicNft = await deploy("BasicNFT", {
+    const contractName = "BasicNFT"
+    const basicNft = await deploy(contractName, {
         from: deployer,
+        contract: contractName,
         args: arguments,
         log: true,
         waitConfirmations: network.config.blockConfirmations || 1,

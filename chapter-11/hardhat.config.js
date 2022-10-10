@@ -52,13 +52,6 @@ module.exports = {
     hardhat: {
       chainId: 31337,
       blockConfirmations: 1,
-      forking: {
-        // through forking we can fork of a specific chain as identified by the URL
-        // and use that as the basis for our local testing which gets us all the contracts
-        // as deployed on the main, but it comes with limitation when you do not know nor have the interface for the contract
-        // hence why people prefer to use mocking
-        url: process.env.MAINNET_RPC_URL,
-      },
     },
     georli: {
       url: process.env.GEORLI_ENDPOINT,

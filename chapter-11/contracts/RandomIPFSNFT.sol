@@ -45,7 +45,14 @@ contract RandomIPFSNFT is ERC721URIStorage, VRFConsumerBaseV2 {
     event NFTRequested(uint256 indexed requestId, address requester);
     event NFTMinted(Breed breed, address minter);
 
-    constructor(address vrfCoordinatorV2, uint64 subscriptionId, bytes32 gasLane, uint256 mintFee, uint32 callbackGasLimit, string[3] memory tokenURIS) VRFConsumerBaseV2(vrfCoordinatorV2) ERC721("Random NFT", "RIN") {
+    constructor(
+        address vrfCoordinatorV2,
+        uint64 subscriptionId,
+        bytes32 gasLane,
+        uint256 mintFee,
+        uint32 callbackGasLimit,
+        string[3] memory tokenURIS
+    ) VRFConsumerBaseV2(vrfCoordinatorV2) ERC721("Random NFT", "RIN") {
         // constant vars
         i_owner = msg.sender;
         i_gasLane = gasLane;
@@ -71,14 +78,14 @@ contract RandomIPFSNFT is ERC721URIStorage, VRFConsumerBaseV2 {
     }
 
     fallback() external payable {
-        requestNft();
+        requestNFT();
     }
 
     receive() external payable {
-        requestNft();
+        requestNFT();
     }
 
-    function requestNft() m_belowMintFee public payable returns (uint256 requestId) {
+    function requestNFT() m_belowMintFee public payable returns (uint256 requestId) {
         requestId = I_COORDINATOR.requestRandomWords(
             i_gasLane,
             i_subscriptionId,
@@ -129,9 +136,10 @@ contract RandomIPFSNFT is ERC721URIStorage, VRFConsumerBaseV2 {
         }
         s_dogTokenURIS = dogTokenUris;
         s_initialized = true;
+        s_tokenCounter  = 0;
     }
 
-    function getTokenCounter() public returns (uint256) {
+    function getTokenCounter() public view returns (uint256) {
         return s_tokenCounter;
     }
 

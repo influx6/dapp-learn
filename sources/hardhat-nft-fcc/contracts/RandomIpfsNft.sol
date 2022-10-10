@@ -94,6 +94,7 @@ contract RandomIpfsNft is ERC721URIStorage, VRFConsumerBaseV2, Ownable {
             revert AlreadyInitialized();
         }
         s_dogTokenUris = dogTokenUris;
+        s_tokenCounter = 0;
         s_initialized = true;
     }
 
