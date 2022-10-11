@@ -53,6 +53,12 @@ contract ReentrantVulnerable {
     }
 }
 
+// @dev the way the re-entrancy happens if when an external call is being made to some external contract before
+// updating the said of the underline value being reduced/used. We must ensure before external calls occur in our contract
+// we can do two things:
+// 1. Ensure to reduce the value that is in question before making the external call e.g reduce related count of a contract as in this example to zero, so if the call which will trigger fallback of the malicious contract tries to
+//      recall our main contract again the logic will fail
+// 2. Guard ourselves with a mutex where we force any other operation to the same source function (e.g withdraw) to fail/block till the first finish, ensuring the state is correctly updated and avoids potential attacks of these kind
 contract Attack {
     ReentrantVulnerable public reentrantVulnerable;
 
