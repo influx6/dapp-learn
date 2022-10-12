@@ -2,6 +2,11 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/sources/dapp-securty/damn-vulnerable-defi" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/sources/dapp-securty/eth-sec-lab" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/sources/dapp-securty/function-clashing-poc" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/sources/dapp-securty/intro-seguridad-smart-contracts" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/sources/dapp-securty/not-so-smart-contracts" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/sources/fund-me-fcc" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/sources/graph-nft-marketplace-fcc" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/sources/hardhat-dao-fcc" vcs="Git" />
