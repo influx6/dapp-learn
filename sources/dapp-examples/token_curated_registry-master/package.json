@@ -1,0 +1,20 @@
+{
+  "name": "token_curated_registry",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.4.2",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
+    "web3": "^1.7.0"
+  }
+}

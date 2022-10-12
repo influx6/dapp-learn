@@ -1,0 +1,40 @@
+body {
+  background: linear-gradient(to bottom, #D2F5FF 0%, rgba(3,75, 82, 0) 100%);
+ height: 100%;
+ margin: 0;
+ background-repeat: no-repeat;
+ background-attachment: fixed;
+}
+
+.center {
+  height: 800px;
+  margin: auto;
+  width: 30%;
+  padding: 10px;
+}
+
+input, button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  width: 200px;
+  font-size: large;
+}
+
+h3 {
+  display: inline;
+  font-size: large;
+}
+
+span {
+  font-size: large;
+}
+
+.user-controls, .user-stats {
+  display: grid;
+  place-content: center;
+  justify-content: center;
+
+  max-width: 400px;
+  padding: 2.5em;
+}
