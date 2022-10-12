@@ -1,10 +1,8 @@
-import { HardhatRuntimeEnvironment } from "hardhat/types"
-import { DeployFunction } from "hardhat-deploy/types"
 import { networkConfig, developmentChains, MIN_DELAY } from "../utils/helper-hardhat-config"
 import { verify } from "../utils/eth-verify"
 import { ethers } from "hardhat"
 
-const deployBox: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+const deployBox = async function (hre) {
   // @ts-ignore
   const { getNamedAccounts, deployments, network } = hre
   const { deploy, log } = deployments
